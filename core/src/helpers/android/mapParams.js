@@ -965,7 +965,71 @@ var map = {
     dontMap: 'true',
     fnName: 'setContentDescription',
     inVokedIn: 'VIEW',
-  }
+  },
+  cx: {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setCx',
+    inVokedIn: 'VIEW'
+  },
+  cy: {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setCy',
+    inVokedIn: 'VIEW'
+  },
+  startAngle: {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setStartAngle',
+    inVokedIn: 'VIEW'
+  },
+  sweepAngle: {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setSweepAngle',
+    inVokedIn: 'VIEW'
+  },
+  radius: {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setRadius',
+    inVokedIn: 'VIEW'
+  },
+  style: {
+    values: [{
+      type: 's'
+    }],
+    'dontMap': true,
+    fnName: 'setStyle',
+    inVokedIn: 'VIEW'
+  },
+  strokeWidth: {
+    values: [{
+      type: 'f'
+    }],
+    'dontMap': true,
+    fnName: 'setStrokeWidth',
+    inVokedIn: 'VIEW'
+  },
+  hex: {
+    values: [{
+      type: 's'
+    }],
+    dontMap: true,
+    fnName: 'setColor',
+    inVokedIn: 'VIEW',
+  },
 }
 
 module.exports = map;

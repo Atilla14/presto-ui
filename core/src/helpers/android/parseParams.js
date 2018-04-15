@@ -430,6 +430,16 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
   return beforeCmd  + prePend + _cmd + afterCmd
 }
 
+function postProcess(cmd, attrs, belongsTo, transformFn) {
+  //Arc Shape
+  if (cmd.indexOf("setCx") != -1 && cmd.indexOf("setCy")) {
+    if (cmd.indexOf("setPrimitive") == -1) {
+      cmd += "this->setPrimitive:s_ARC;"
+    }
+  }
+  return cmd;
+}
+
 function parseAttrs(attrs, belongsTo, transformFn) {
   var obj;
   var retVal;
@@ -440,6 +450,10 @@ function parseAttrs(attrs, belongsTo, transformFn) {
     obj = mapParams[attrs[i].key];
     if (obj) {
       cmd += mashThis(attrs[i], obj, belongsTo, transformFn);
+      //set id is only in last commmand
+      if (cmd.indexOf("setId") != -1) {
+        postProcess(cmd, attrs, belongsTo, transformFn);
+      }
     }
   }
 
