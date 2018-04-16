@@ -1030,6 +1030,22 @@ var map = {
     fnName: 'setColor',
     inVokedIn: 'VIEW',
   },
+  points: {
+    values: [{
+      type: 's'
+    }],
+    dontMap: true,
+    fnName: 'setPoints',
+    inVokedIn: 'VIEW'
+  },
+  strokeCap: {
+    values: [{
+      type: 's'
+    }],
+    dontMap: true,
+    fnName: 'setStrokeCap',
+    inVokedIn: 'VIEW'
+  }
 }
 
 module.exports = map;

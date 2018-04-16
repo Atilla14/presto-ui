@@ -152,7 +152,7 @@ function getCtr(viewGroup) {
     'view': 'android.widget.LinearLayout$LayoutParams->new',
     'horizontalScrollView': 'android.widget.LinearLayout$LayoutParams->new',
     'listView': 'android.widget.LinearLayout$LayoutParams->new',
-    'expandableListView': 'android.widget.LinearLayout$LayoutParams->new',
+    'expandableListView': 'android.widget.LinearLayout$LayoutParams->new'
   }
 
   if(!viewGroupMap[viewGroup]) {
@@ -172,6 +172,9 @@ function handleSpecialChars(value) {
 }
 
 function appendArgs(attrs, obj) {
+  if(attrs.key == "points") {
+    return `s_${attrs.value}`;
+  }
   if (!obj.values)
   return "";
 
@@ -294,6 +297,8 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
     }
   }
 
+  // shape
+  // Circle
   if (attrs.key == "fontStyle") {
     prePend = "set_ast=ctx->getAssets;set_type=android.graphics.Typeface->createFromAsset:get_ast,s_fonts\/" + attrs.value + "\.ttf;";
     currTransVal = "get_type";
@@ -402,6 +407,12 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
     currTransVal = "get_spinnerAdapter";
   }
 
+  // if(attrs.key == "points") {
+  //   if(getSetType === "set") {
+  //     _cmd = "this->setPoints:s_" + attrs.value;
+  //   }
+  // }
+
   if (belongsTo == "VIEW")
   keyWord = globalObjMap[belongsTo].val;
   else
@@ -431,11 +442,16 @@ function mashThis(attrs, obj, belongsTo, transformFn) {
 }
 
 function postProcess(cmd, attrs, belongsTo, transformFn) {
-  //Arc Shape
-  if (cmd.indexOf("setCx") != -1 && cmd.indexOf("setCy")) {
-    if (cmd.indexOf("setPrimitive") == -1) {
+  if (cmd.indexOf("setPrimitive") == -1) {
+    //Arc Shape
+    if (cmd.indexOf("setCx") != -1 && (cmd.indexOf("setCy") != -1)) {
       cmd += "this->setPrimitive:s_ARC;"
     }
+    //Lines Shape
+    if (cmd.indexOf("setPoints") != -1) {
+      cmd += "this->setPrimitive:s_LINES;"
+    }
+    console.log("posProcess  ", cmd);
   }
   return cmd;
 }
@@ -450,12 +466,12 @@ function parseAttrs(attrs, belongsTo, transformFn) {
     obj = mapParams[attrs[i].key];
     if (obj) {
       cmd += mashThis(attrs[i], obj, belongsTo, transformFn);
-      //set id is only in last commmand
       if (cmd.indexOf("setId") != -1) {
-        postProcess(cmd, attrs, belongsTo, transformFn);
+        cmd = postProcess(cmd, attrs, belongsTo, transformFn);
       }
     }
   }
+  //set id is only in last commmand
 
   if (belongsTo == "VIEW")
   return cmd;
@@ -499,7 +515,7 @@ function parseGroups(type, groups, config) {
           ctr = config.root?getCtr(type):'PARAM_CTR_HOLDER';
           globalObjMap.PARAMS = {ctr: ctr, val: "PARAMS" };
         }
-
+        
         command +=  'set_' +  globalObjMap.PARAMS.val + '=' +  parseAttrs(groups.PARAMS, 'PARAMS', true)
              + 'this->' + objMap.PARAMS.viewMethod.split(',')[0] + ':get_'  + globalObjMap.PARAMS.val + ';';
       } else {
